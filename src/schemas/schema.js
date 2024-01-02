@@ -1,12 +1,17 @@
+import { UserTypes ,UserResolvers } from "./user/index.js";
+
 const typeDefs = `#graphql
     type Query {
-        name: String!   
+        users: [User]
+        login(userid: String!, password: String!): Login   
     }
+
+    ${UserTypes}
 `;
 
 const resolvers = {
     Query : {
-        name: () => "Ruturaj"
+        ...UserResolvers
     }
 }
 
