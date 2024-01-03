@@ -1,4 +1,4 @@
-import { hash } from "bcrypt";
+import { compare, hash } from "bcrypt";
 import { createJwtToken, initializeDb } from "../_db.js";
 import { v4 } from "uuid";
 
@@ -16,19 +16,19 @@ export const getUsers = async () => {
 
 export const loginUser = async ({ userid, password }) => {
   try {
+    //Compare with hashed password
     let token = "";
-    let match = await usersRef
-      .where("userid", "==", userid)
-      .where("password", "==", password)
-      .get();
-    if (match.empty) throw Error("Incorrect username or password");
-    const [matchedUser] = getDataList(match);
-    if (matchedUser.id) token = createJwtToken(matchedUser.id);
+    const foundUser = (await usersRef.doc(userid).get()).data();
+    if (!foundUser.id) throw Error("User not found");
+    const passwordMatch = await compare(password, foundUser.password);
+    if(!passwordMatch) throw Error("Incorrect password");
+    
+    token = createJwtToken(foundUser.userid);
     //if user is found and credentials matched
     return {
-      success: matchedUser.id ? true : false,
-      token: matchedUser.id ? token : null,
-      user: matchedUser.id ? matchedUser : null,
+      success: foundUser.id ? true : false,
+      token: foundUser.id ? token : null,
+      user: foundUser.id ? foundUser : null,
     };
   } catch (e) {
     console.log(e.message);
@@ -48,7 +48,8 @@ export const registerUser = async ({ userid, password, name }) => {
       name,
     });
     const userObj = (await usersRef.doc(userid).get()).data();
-    if (userObj.id) token = createJwtToken(userObj.id);
+    if (!userObj.id) throw Error("Error while registering user.")
+    token = createJwtToken(userObj.userid);
     return {
       success: userObj.id ? true : false,
       token: userObj.id ? token : null,
