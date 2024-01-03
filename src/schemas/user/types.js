@@ -6,9 +6,20 @@ export const UserTypes = `#graphql
         userid: String
     }
 
-    type Login {
+    type AuthPayload {
         success: Boolean!,
         token: String,
         user: User
+    }
+
+    input LoginPayload {
+        userid: String!,
+        password: String!
+    }
+
+    input RegisterPayload {
+        userid: String!,
+        password: String!,
+        name: String!
     }
 `

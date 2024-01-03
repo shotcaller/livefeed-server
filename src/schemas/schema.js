@@ -3,7 +3,11 @@ import { UserTypes ,UserResolvers } from "./user/index.js";
 const typeDefs = `#graphql
     type Query {
         users: [User]
-        login(userid: String!, password: String!): Login   
+    }
+
+    type Mutation {
+        login(loginPayload: LoginPayload!): AuthPayload
+        register(registerPayload: RegisterPayload!): AuthPayload
     }
 
     ${UserTypes}
@@ -11,7 +15,10 @@ const typeDefs = `#graphql
 
 const resolvers = {
     Query : {
-        ...UserResolvers
+        ...UserResolvers.Query
+    },
+    Mutation: {
+        ...UserResolvers.Mutation
     }
 }
 
