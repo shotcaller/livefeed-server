@@ -11,7 +11,7 @@ export const UserResolvers = {
   },
 
   Mutation: {
-    login: async (_, args, context) => {
+    login: async (_, args) => {
       const { userid, password } = args.loginPayload;
       let token = "";
       const foundUser = await findUserByUserid(userid);

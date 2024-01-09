@@ -2,7 +2,7 @@ import pkg from "jsonwebtoken";
 
 const { sign, verify } = pkg;
 const bcryptRounds = 10;
-const tokenUID = "livefeed-firestore-authentication-token-uid";
+const tokenUID = process.env.JWT_SECRET;
 
 
 export const createJwtToken = (id) => {
