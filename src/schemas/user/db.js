@@ -14,11 +14,9 @@ export const getUsers = async () => {
 export const findUserByUserid = async (userid) => {
     try {
         const foundUser = (await usersRef.doc(userid).get()).data();
-        if (!foundUser.id) throw Error("User not found");
         return foundUser;
     } catch (e) {
         console.log(e);
-        return e.message;
     } 
 }
 

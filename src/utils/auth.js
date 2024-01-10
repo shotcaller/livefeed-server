@@ -1,23 +1,20 @@
 import pkg from "jsonwebtoken";
 
 const { sign, verify } = pkg;
-const bcryptRounds = 10;
-const tokenUID = process.env.JWT_SECRET;
 
 
 export const createJwtToken = (id) => {
   try {
 		//creating token with userid
-		const token =  sign({id: id}, tokenUID, {
+		const token =  sign({id: id}, process.env.JWT_SECRET, {
 			expiresIn: "1h"
 		})
     return token;
   } catch (e) {
 		console.log(e);
-		return `Error while creating token: ${e}`
 	}
 };
 
 export const verifyToken = (token) => {
-	return verify(token, tokenUID);
+	return verify(token, process.env.JWT_SECRET);
 }

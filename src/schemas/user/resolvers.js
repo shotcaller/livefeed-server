@@ -15,6 +15,7 @@ export const UserResolvers = {
       const { userid, password } = args.loginPayload;
       let token = "";
       const foundUser = await findUserByUserid(userid);
+      if(!foundUser) throw Error("User does not exist");
       const passwordMatch = await compare(password, foundUser.password);
       if (!passwordMatch) throw Error("Incorrect password");
 
@@ -29,7 +30,7 @@ export const UserResolvers = {
 
     register: async (_, args) => {
       const { userid, password, name } = args.registerPayload;
-      const hashedPassword = await hash(password, bcryptRounds);
+      const hashedPassword = await hash(password, 10);
       const id = v4();
       let token = "";
       const userObj = await createUser({ id, userid, name, hashedPassword });

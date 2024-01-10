@@ -21,10 +21,9 @@ app.use(express.json())
 app.use((req, res, next) => {
   try{
     if(req.body.operationName && (req.body.operationName!=='Login' && req.body.operationName!=='Register')){
-      if(!req.headers.authorization && false) //Remove false once test with acutal auth field
+      if(!req.headers.authorization) //Remove false once test with acutal auth field
         throw Error("No token found");
-      const verifiedUser = verifyToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InRlc3RVc2VyMiIsImlhdCI6MTcwNDgyODcxNCwiZXhwIjoxNzA0ODMyMzE0fQ.0EJLhcdBqu_ZS0Ti7Nt9aWyAGt8KktHpfZpuDWFB7IA")
-      //const verifiedUser = verifyToken(req.headers.authorization.split(' ')[1]);
+      const verifiedUser = verifyToken(req.headers.authorization.split(' ')[1]);
       req.body.userIdFromToken = verifiedUser;
       next();
     }
