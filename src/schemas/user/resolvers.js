@@ -33,9 +33,8 @@ export const UserResolvers = {
       const { userid, password, name } = args.registerPayload;
       const hashedPassword = await hash(password, 10);
       const id = v4();
-      let token = "";
+      let token = "No token required";
       const userObj = await createUser({ id, userid, name, hashedPassword });
-      token = "No token required";
       return {
         success: userObj.id ? true : false,
         token: userObj.id ? token : null,

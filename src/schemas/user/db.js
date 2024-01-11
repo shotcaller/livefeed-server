@@ -20,13 +20,13 @@ export const findUserByUserid = async (userid) => {
     } 
 }
 
-export const createUser = async ({id, userid, name, password }) => {
+export const createUser = async ({id, userid, name, hashedPassword }) => {
     try {
         await usersRef.doc(userid).set({
             id,
             userid,
             name,
-            password,
+            hashedPassword,
           });
           const userObj = (await usersRef.doc(userid).get()).data();
           if (!userObj.id) throw Error("Error while registering user.")
@@ -34,7 +34,6 @@ export const createUser = async ({id, userid, name, password }) => {
 
     } catch(e) {
         console.log(e);
-        return e.message;
     }
 }
 
