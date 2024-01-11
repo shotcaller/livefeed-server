@@ -1,6 +1,7 @@
 import { compare, hash } from "bcrypt";
 import { createJwtToken } from "../../utils/auth.js";
 import { getUsers, findUserByUserid, createUser } from "./db.js";
+import { v4 } from "uuid";
 
 export const UserResolvers = {
   Query: {
@@ -34,7 +35,7 @@ export const UserResolvers = {
       const id = v4();
       let token = "";
       const userObj = await createUser({ id, userid, name, hashedPassword });
-      token = createJwtToken(userObj.userid);
+      token = "No token required";
       return {
         success: userObj.id ? true : false,
         token: userObj.id ? token : null,
