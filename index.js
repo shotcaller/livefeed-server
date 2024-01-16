@@ -24,6 +24,7 @@ app.use((req, res, next) => {
       if(!req.headers.authorization) //Remove false once test with acutal auth field
         throw Error("No token found");
       const verifiedUser = verifyToken(req.headers.authorization.split(' ')[1]);
+      //This object contains {id: 'xxxxx', iat: 00000, exp: 00000 }
       req.body.userIdFromToken = verifiedUser;
       next();
     }

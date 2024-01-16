@@ -9,6 +9,15 @@ export const UserResolvers = {
       const res = getUsers();
       return res;
     },
+    loggedInUser: async (_parent, _args, context) => {
+      const loggedInUserId = context.userIdFromToken;
+      const foundUser = await findUserByUserid(loggedInUserId.id);
+      if(!foundUser) throw Error("User does not exist");
+
+      return foundUser.id? foundUser : null
+        
+    
+    }
   },
 
   Mutation: {
@@ -17,7 +26,7 @@ export const UserResolvers = {
       let token = "";
       const foundUser = await findUserByUserid(userid);
       if(!foundUser) throw Error("User does not exist");
-      const passwordMatch = await compare(password, foundUser.password);
+      const passwordMatch = await compare(password, foundUser.hashedPassword);
       if (!passwordMatch) throw Error("Incorrect password");
 
       token = createJwtToken(foundUser.userid);

@@ -2,7 +2,8 @@ import { UserTypes ,UserResolvers } from "./user/index.js";
 
 const typeDefs = `#graphql
     type Query {
-        users: [User]
+        users: [User],
+        loggedInUser: User
     }
 
     type Mutation {
