@@ -14,9 +14,17 @@ export const UserResolvers = {
       const foundUser = await findUserByUserid(loggedInUserId.id);
       if(!foundUser) throw Error("User does not exist");
 
-      return foundUser.id? foundUser : null
-        
-    
+      //Retrieving friends of logged in user,  if no friends - empty array
+      if(foundUser?.friends?.length>0){
+        const friendList = foundUser.friends.map(async userid => {
+          const friend = await findUserByUserid(userid);
+          if(friend) return friend;
+        });
+        foundUser.friends = friendList;
+      } else 
+          foundUser.friends = [];
+
+      return foundUser.id? foundUser : null;
     }
   },
 
