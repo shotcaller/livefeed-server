@@ -20,6 +20,9 @@ const resolvers = {
     },
     Mutation: {
         ...UserResolvers.Mutation
+    },
+    User : {
+      ...UserResolvers.User
     }
 }
 

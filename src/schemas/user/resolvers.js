@@ -5,27 +5,17 @@ import { v4 } from "uuid";
 
 export const UserResolvers = {
   Query: {
-    users: (_parent,_args,context) => {
+    users: (_parent, _args, context) => {
       const res = getUsers();
       return res;
     },
     loggedInUser: async (_parent, _args, context) => {
       const loggedInUserId = context.userIdFromToken;
       const foundUser = await findUserByUserid(loggedInUserId.id);
-      if(!foundUser) throw Error("User does not exist");
+      if (!foundUser) throw Error("User does not exist");
 
-      //Retrieving friends of logged in user,  if no friends - empty array
-      if(foundUser?.friends?.length>0){
-        const friendList = foundUser.friends.map(async userid => {
-          const friend = await findUserByUserid(userid);
-          if(friend) return friend;
-        });
-        foundUser.friends = friendList;
-      } else 
-          foundUser.friends = [];
-
-      return foundUser.id? foundUser : null;
-    }
+      return foundUser.id ? foundUser : null;
+    },
   },
 
   Mutation: {
@@ -57,6 +47,20 @@ export const UserResolvers = {
         token: userObj.id ? token : null,
         user: userObj.id ? userObj : null,
       };
+    },
+  },
+  
+  //Type Resolvers start here....
+  User: {
+    friends: async (parent, _args, _) => {
+      //Retrieving friends of logged in user,  if no friends - empty array
+      if (parent.friends?.length > 0) {
+        const friendList = parent.friends.map(async (userid) => {
+          const friend = await findUserByUserid(userid);
+          if (friend) return friend;
+        });
+        return friendList;
+      } else return [];
     },
   },
 };
