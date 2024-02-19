@@ -1,3 +1,4 @@
+import { FieldValue } from "firebase-admin/firestore";
 import { initializeDb } from "../_db.js";
 
 const db = await initializeDb();
@@ -16,7 +17,7 @@ export const findUserByUserid = async (userid) => {
         const foundUser = (await usersRef.doc(userid).get()).data();
         return foundUser;
     } catch (e) {
-        console.log(e);
+        console.error(e);
     } 
 }
 
@@ -27,14 +28,27 @@ export const createUser = async ({id, userid, name, hashedPassword }) => {
             userid,
             name,
             hashedPassword,
+            friends: []
           });
           const userObj = (await usersRef.doc(userid).get()).data();
           if (!userObj.id) throw Error("Error while registering user.")
           return userObj;
 
     } catch(e) {
-        console.log(e);
+        console.error(e);
     }
+}
+
+export const addFriend = async (userid, friendUserId) => {
+  try{
+    await usersRef.doc(userid).update({
+      friends : FieldValue.arrayUnion(friendUserId)
+    });
+    
+    return (await usersRef.doc(userid).get()).data();
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 /** Helper functions */

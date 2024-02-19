@@ -1,6 +1,6 @@
 import { compare, hash } from "bcrypt";
 import { createJwtToken } from "../../utils/auth.js";
-import { getUsers, findUserByUserid, createUser } from "./db.js";
+import { getUsers, findUserByUserid, createUser, addFriend } from "./db.js";
 import { v4 } from "uuid";
 
 export const UserResolvers = {
@@ -48,6 +48,12 @@ export const UserResolvers = {
         user: userObj.id ? userObj : null,
       };
     },
+
+    addFriend: async (_, args, context) => {
+      const { friendUserId } = args;
+      const res = await addFriend(context.userIdFromToken, friendUserId);
+      return res;
+    }
   },
   
   //Type Resolvers start here....

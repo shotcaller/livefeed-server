@@ -7,8 +7,9 @@ const typeDefs = `#graphql
     }
 
     type Mutation {
-        login(loginPayload: LoginPayload!): AuthPayload
-        register(registerPayload: RegisterPayload!): AuthPayload
+        login(loginPayload: LoginPayload!): AuthPayload,
+        register(registerPayload: RegisterPayload!): AuthPayload,
+        addFriend(friendUserId: String!): User
     }
 
     ${UserTypes}
