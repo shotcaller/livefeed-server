@@ -51,7 +51,7 @@ export const UserResolvers = {
 
     addFriend: async (_, args, context) => {
       const { friendUserId } = args;
-      const res = await addFriend(context.userIdFromToken, friendUserId);
+      const res = await addFriend(context.userIdFromToken.id, friendUserId);
       return res;
     }
   },
