@@ -4,7 +4,7 @@ export const UserTypes = `#graphql
         name: String,
         password: String,
         userid: String,
-        friends: [User!]
+        friends: [User]!
     }
 
     type AuthPayload {
